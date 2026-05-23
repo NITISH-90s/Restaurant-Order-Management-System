@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>Restaurant Login</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            background:
+            linear-gradient(
+            135deg,
+            #0f172a,
+            #111827,
+            #1e293b
+            );
+
+            overflow:hidden;
+
+            position:relative;
+        }
+
+        body::before{
+
+            content:"";
+
+            position:absolute;
+
+            width:500px;
+            height:500px;
+
+            background:
+            rgba(255,140,0,0.18);
+
+            border-radius:50%;
+
+            top:-180px;
+            left:-180px;
+
+            filter:blur(100px);
+        }
+
+        body::after{
+
+            content:"";
+
+            position:absolute;
+
+            width:450px;
+            height:450px;
+
+            background:
+            rgba(0,255,200,0.15);
+
+            border-radius:50%;
+
+            bottom:-180px;
+            right:-180px;
+
+            filter:blur(100px);
+        }
+
+        .login-container{
+
+            width:100%;
+
+            max-width:460px;
+
+            padding:20px;
+
+            position:relative;
+
+            z-index:10;
+        }
+
+        .glass-card{
+
+            background:
+            rgba(255,255,255,0.08);
+
+            border:
+            1px solid rgba(255,255,255,0.1);
+
+            backdrop-filter:blur(18px);
+
+            border-radius:35px;
+
+            padding:45px;
+
+            box-shadow:
+            0 15px 40px rgba(0,0,0,0.5);
+
+            animation:fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn{
+
+            from{
+                opacity:0;
+                transform:translateY(30px);
+            }
+
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        .logo{
+
+            text-align:center;
+
+            margin-bottom:25px;
+        }
+
+        .logo i{
+
+            font-size:75px;
+
+            color:#ffcc00;
+
+            margin-bottom:20px;
+        }
+
+        .logo h1{
+
+            font-size:42px;
+
+            font-weight:800;
+
+            background:
+            linear-gradient(
+            to right,
+            #ffcc00,
+            #ff6b00,
+            #ff3d00
+            );
+
+            background-clip:text;
+
+            -webkit-background-clip:text;
+
+            color:transparent;
+
+            margin-bottom:12px;
+        }
+
+        .logo p{
+
+            color:#d1d5db;
+
+            font-size:17px;
+        }
+
+        .form-control{
+
+            background:
+            rgba(0,0,0,0.45);
+
+            border:none;
+
+            color:white;
+
+            padding:16px;
+
+            border-radius:18px;
+
+            margin-bottom:20px;
+
+            font-size:17px;
+        }
+
+        .form-control:focus{
+
+            background:
+            rgba(0,0,0,0.6);
+
+            color:white;
+
+            border:2px solid orange;
+
+            box-shadow:none;
+        }
+
+        .form-control::placeholder{
+
+            color:#cbd5e1;
+        }
+
+        .input-group-text{
+
+            background:
+            rgba(0,0,0,0.45);
+
+            border:none;
+
+            color:#ffcc00;
+
+            border-radius:18px 0 0 18px;
+        }
+
+        .btn-login{
+
+            width:100%;
+
+            padding:16px;
+
+            border:none;
+
+            border-radius:18px;
+
+            font-size:20px;
+
+            font-weight:bold;
+
+            background:
+            linear-gradient(
+            to right,
+            #ffcc00,
+            #ff6b00
+            );
+
+            color:white;
+
+            transition:0.3s;
+        }
+
+        .btn-login:hover{
+
+            transform:translateY(-3px);
+
+            box-shadow:
+            0 0 25px orange;
+        }
+
+        .extra-links{
+
+            margin-top:25px;
+
+            text-align:center;
+        }
+
+        .extra-links a{
+
+            color:#cbd5e1;
+
+            text-decoration:none;
+
+            font-size:15px;
+
+            transition:0.3s;
+        }
+
+        .extra-links a:hover{
+
+            color:#ffcc00;
+        }
+
+        .divider{
+
+            height:1px;
+
+            background:
+            rgba(255,255,255,0.1);
+
+            margin:25px 0;
+        }
+
+        .features{
+
+            display:grid;
+
+            grid-template-columns:
+            repeat(2,1fr);
+
+            gap:12px;
+
+            margin-top:20px;
+        }
+
+        .feature-box{
+
+            background:
+            rgba(255,255,255,0.05);
+
+            padding:12px;
+
+            border-radius:14px;
+
+            text-align:center;
+
+            color:#d1d5db;
+
+            font-size:14px;
+
+            transition:0.3s;
+        }
+
+        .feature-box:hover{
+
+            transform:scale(1.05);
+
+            background:
+            rgba(255,140,0,0.2);
+        }
+
+        @media(max-width:600px){
+
+            .glass-card{
+
+                padding:30px;
+            }
+
+            .logo h1{
+
+                font-size:32px;
+            }
+
+            .features{
+
+                grid-template-columns:1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <div class="glass-card">
+
+        <div class="logo">
+
+            <i class="fa-solid fa-utensils"></i>
+
+            <h1>
+                Restaurant Admin
+            </h1>
+
+            <p>
+                Smart Restaurant Management Portal
+            </p>
+
+        </div>
+
+        <form id="loginForm">
+
+            <div class="input-group mb-3">
+
+                <span class="input-group-text">
+
+                    <i class="fa-solid fa-user"></i>
+
+                </span>
+
+                <input
+                type="text"
+                id="username"
+                class="form-control"
+                placeholder="Enter Username"
+                required>
+
+            </div>
+
+
+            <div class="input-group mb-3">
+
+                <span class="input-group-text">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                </span>
+
+                <input
+                type="password"
+                id="password"
+                class="form-control"
+                placeholder="Enter Password"
+                required>
+
+            </div>
+
+
+            <button class="btn-login">
+
+                <i class="fa-solid fa-right-to-bracket"></i>
+
+                Login Now
+
+            </button>
+
+        </form>
+
+
+        <div class="extra-links">
+
+            <a href="#">
+                Forgot Password?
+            </a>
+
+        </div>
+
+        <div class="divider"></div>
+
+
+        <div class="features">
+
+            <div class="feature-box">
+                📋 Menu Control
+            </div>
+
+            <div class="feature-box">
+                🛒 Orders
+            </div>
+
+            <div class="feature-box">
+                💳 Billing
+            </div>
+
+            <div class="feature-box">
+                📊 Analytics
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const loginForm =
+document.getElementById("loginForm");
+
+
+loginForm.addEventListener(
+"submit",
+
+function(e){
+
+    e.preventDefault();
+
+    const username =
+    document.getElementById(
+    "username").value;
+
+    const password =
+    document.getElementById(
+    "password").value;
+
+
+    // SIMPLE DEMO LOGIN
+
+    if(
+
+        username === "admin"
+
+        &&
+
+        password === "admin123"
+
+    ){
+
+        alert("Login Successful ✅");
+
+        window.location.href = "/";
+
+    }
+
+    else{
+
+        alert("Invalid Username or Password ❌");
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>

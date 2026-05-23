@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Restaurant Menu Management</title>
+
+    <!-- Google Font -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            background:
+
+            radial-gradient(circle at top left,
+            rgba(255,140,0,0.15),
+            transparent 30%),
+
+            radial-gradient(circle at bottom right,
+            rgba(0,255,200,0.08),
+            transparent 30%),
+
+            linear-gradient(
+            135deg,
+            #0b1220,
+            #111827,
+            #1f2937
+            );
+
+            color:white;
+
+            overflow-x:hidden;
+        }
+
+        .navbar{
+
+            width:100%;
+
+            padding:20px 60px;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            background:rgba(255,255,255,0.05);
+
+            backdrop-filter:blur(10px);
+
+            border-bottom:1px solid rgba(255,255,255,0.08);
+
+            position:sticky;
+
+            top:0;
+
+            z-index:1000;
+        }
+
+        .logo{
+
+            font-size:30px;
+
+            font-weight:700;
+
+            color:#ffcc00;
+        }
+
+        .nav-links{
+
+            display:flex;
+
+            gap:25px;
+        }
+
+        .nav-links a{
+
+            text-decoration:none;
+
+            color:white;
+
+            transition:0.3s;
+        }
+
+        .nav-links a:hover{
+
+            color:#ffcc00;
+        }
+
+        .container{
+
+            max-width:1400px;
+
+            margin:auto;
+
+            padding:40px;
+        }
+
+        h1{
+
+            text-align:center;
+
+            font-size:60px;
+
+            margin-bottom:15px;
+
+            background:linear-gradient(to right,#ffcc00,#ff6b00);
+
+            background-clip:text;
+
+            -webkit-background-clip:text;
+
+            color:transparent;
+        }
+
+        .subtitle{
+
+            text-align:center;
+
+            color:#ccc;
+
+            margin-bottom:40px;
+
+            font-size:18px;
+        }
+
+        .stats-grid{
+
+            display:grid;
+
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+            gap:25px;
+
+            margin-bottom:50px;
+        }
+
+        .stat-card{
+
+            background:rgba(255,255,255,0.08);
+
+            border-radius:25px;
+
+            padding:30px;
+
+            text-align:center;
+
+            backdrop-filter:blur(10px);
+
+            border:1px solid rgba(255,255,255,0.1);
+
+            transition:0.3s;
+        }
+
+        .stat-card:hover{
+
+            transform:translateY(-10px);
+
+            box-shadow:0 0 25px rgba(255,165,0,0.25);
+        }
+
+        .stat-card h2{
+
+            color:#ffcc00;
+
+            font-size:42px;
+
+            margin-bottom:10px;
+        }
+
+        .stat-card p{
+
+            color:#ddd;
+        }
+
+        .form-box{
+
+            background:rgba(255,255,255,0.08);
+
+            border-radius:30px;
+
+            padding:35px;
+
+            backdrop-filter:blur(15px);
+
+            border:1px solid rgba(255,255,255,0.1);
+
+            box-shadow:0 0 35px rgba(255,140,0,0.15);
+
+            margin-bottom:50px;
+        }
+
+        .form-box h2{
+
+            margin-bottom:25px;
+
+            color:#ffcc00;
+
+            font-size:32px;
+        }
+
+        .form-grid{
+
+            display:grid;
+
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+            gap:20px;
+        }
+
+        input,
+        select{
+
+            width:100%;
+
+            padding:16px;
+
+            border:none;
+
+            border-radius:14px;
+
+            background:#1f2937;
+
+            color:white;
+
+            font-size:15px;
+        }
+
+        input:focus{
+
+            outline:none;
+
+            border:2px solid orange;
+        }
+
+        .submit-btn{
+
+            margin-top:25px;
+
+            width:100%;
+
+            padding:16px;
+
+            border:none;
+
+            border-radius:15px;
+
+            background:linear-gradient(to right,#ffcc00,#ff6b00);
+
+            color:white;
+
+            font-size:18px;
+
+            font-weight:600;
+
+            cursor:pointer;
+
+            transition:0.3s;
+        }
+
+        .submit-btn:hover{
+
+            transform:translateY(-4px);
+
+            box-shadow:0 0 25px rgba(255,165,0,0.4);
+        }
+
+        .top-controls{
+
+            display:flex;
+
+            gap:20px;
+
+            margin-bottom:40px;
+        }
+
+        #menuContainer{
+
+            display:grid;
+
+            grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+
+            gap:30px;
+        }
+
+        .food-card{
+
+            background:rgba(255,255,255,0.08);
+
+            border-radius:25px;
+
+            overflow:hidden;
+
+            backdrop-filter:blur(14px);
+
+            border:1px solid rgba(255,255,255,0.08);
+
+            transition:0.4s;
+
+            position:relative;
+        }
+
+        .food-card:hover{
+
+            transform:translateY(-12px);
+
+            box-shadow:0 0 30px rgba(255,165,0,0.25);
+        }
+
+        .food-image{
+
+            width:100%;
+
+            height:240px;
+
+            object-fit:cover;
+
+            transition:0.4s;
+        }
+
+        .food-card:hover .food-image{
+
+            transform:scale(1.08);
+        }
+
+        .offer{
+
+            position:absolute;
+
+            top:15px;
+
+            right:15px;
+
+            background:#ff003c;
+
+            color:white;
+
+            padding:8px 14px;
+
+            border-radius:30px;
+
+            font-size:13px;
+
+            font-weight:600;
+
+            z-index:2;
+        }
+
+        .food-content{
+
+            padding:25px;
+        }
+
+        .food-content h2{
+
+            color:#ffcc00;
+
+            margin-bottom:10px;
+        }
+
+        .food-content p{
+
+            color:#ddd;
+
+            margin-bottom:8px;
+        }
+
+        .price{
+
+            font-size:28px;
+
+            color:#00ffae;
+
+            font-weight:bold;
+
+            margin-top:10px;
+        }
+
+        .card-buttons{
+
+            display:flex;
+
+            gap:12px;
+
+            margin-top:20px;
+        }
+
+        .card-buttons button{
+
+            flex:1;
+
+            padding:12px;
+
+            border:none;
+
+            border-radius:12px;
+
+            color:white;
+
+            cursor:pointer;
+
+            font-weight:600;
+
+            transition:0.3s;
+        }
+
+        .delete-btn{
+
+            background:#ff003c;
+        }
+
+        .edit-btn{
+
+            background:#0099ff;
+        }
+
+        .card-buttons button:hover{
+
+            transform:scale(1.05);
+        }
+
+        .empty-text{
+
+            text-align:center;
+
+            color:#ccc;
+
+            font-size:22px;
+
+            margin-top:40px;
+        }
+
+        @media(max-width:768px){
+
+            .navbar{
+
+                flex-direction:column;
+
+                gap:20px;
+
+                padding:20px;
+            }
+
+            .container{
+
+                padding:20px;
+            }
+
+            h1{
+
+                font-size:38px;
+            }
+
+            .top-controls{
+
+                flex-direction:column;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🍽 Food Admin
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">Home</a>
+
+        <a href="/menu-page">Menu</a>
+
+        <a href="/analytics-page">Analytics</a>
+
+    </div>
+
+</nav>
+
+<div class="container">
+
+    <h1>Restaurant Menu Management</h1>
+
+    <p class="subtitle">
+        Manage restaurant food items, pricing, categories and offers
+    </p>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <h2>45+</h2>
+            <p>Food Items</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>12</h2>
+            <p>Categories</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>120+</h2>
+            <p>Orders Served</p>
+        </div>
+
+    </div>
+
+    <div class="form-box">
+
+        <h2>➕ Add New Food Item</h2>
+
+        <form id="foodForm">
+
+            <div class="form-grid">
+
+                <input type="text"
+                    id="name"
+                    placeholder="Food Name"
+                    required>
+
+                <input type="text"
+                    id="category"
+                    placeholder="Category"
+                    required>
+
+                <input type="number"
+                    id="price"
+                    placeholder="Price"
+                    required>
+
+                <input type="text"
+                    id="image"
+                    placeholder="Food Image URL"
+                    required>
+
+            </div>
+
+            <input type="text"
+                id="offer"
+                placeholder="Special Offer">
+
+            <button type="submit" class="submit-btn">
+                ➕ Add Food Item
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="top-controls">
+
+        <input type="text"
+            id="searchInput"
+            placeholder="🔍 Search Food">
+
+        <select id="categoryFilter">
+
+            <option value="All">All Categories</option>
+
+            <option value="Fast Food">Fast Food</option>
+
+            <option value="Dessert">Dessert</option>
+
+            <option value="Drinks">Drinks</option>
+
+            <option value="South Indian">South Indian</option>
+
+        </select>
+
+    </div>
+
+    <div id="menuContainer"></div>
+
+</div>
+
+<script>
+
+const form = document.getElementById("foodForm");
+
+const menuContainer = document.getElementById("menuContainer");
+
+const searchInput = document.getElementById("searchInput");
+
+const categoryFilter = document.getElementById("categoryFilter");
+
+let editId = null;
+
+
+async function loadMenu(){
+
+    const response = await fetch("/menu");
+
+    const data = await response.json();
+
+    displayMenu(data);
+}
+
+
+function displayMenu(data){
+
+    menuContainer.innerHTML = "";
+
+    if(data.length === 0){
+
+        menuContainer.innerHTML = `
+            <div class="empty-text">
+                No Food Items Available 🍔
+            </div>
+        `;
+
+        return;
+    }
+
+    data.forEach(item => {
+
+        menuContainer.innerHTML += `
+
+        <div class="food-card">
+
+            <span class="offer">
+                ${item.offer || "Special"}
+            </span>
+
+            <img src="${item.image}"
+                class="food-image">
+
+            <div class="food-content">
+
+                <h2>${item.name}</h2>
+
+                <p>📂 ${item.category}</p>
+
+                <div class="price">
+                    ₹${item.price}
+                </div>
+
+                <div class="card-buttons">
+
+                    <button class="edit-btn"
+                        onclick='editFood(${JSON.stringify(item)})'>
+
+                        Edit
+
+                    </button>
+
+                    <button class="delete-btn"
+                        onclick="deleteFood(${item.id})">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        `;
+    });
+}
+
+
+form.addEventListener("submit", async function(e){
+
+    e.preventDefault();
+
+    const food = {
+
+        name: document.getElementById("name").value,
+
+        category: document.getElementById("category").value,
+
+        price: document.getElementById("price").value,
+
+        image: document.getElementById("image").value,
+
+        offer: document.getElementById("offer").value
+
+    };
+
+    if(editId){
+
+        await fetch(`/menu/${editId}`,{
+
+            method:"PUT",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify(food)
+        });
+
+        editId = null;
+
+    }else{
+
+        await fetch("/menu",{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify(food)
+        });
+    }
+
+    form.reset();
+
+    loadMenu();
+});
+
+
+async function deleteFood(id){
+
+    await fetch(`/menu/${id}`,{
+
+        method:"DELETE"
+    });
+
+    loadMenu();
+}
+
+
+function editFood(item){
+
+    editId = item.id;
+
+    document.getElementById("name").value = item.name;
+
+    document.getElementById("category").value = item.category;
+
+    document.getElementById("price").value = item.price;
+
+    document.getElementById("image").value = item.image;
+
+    document.getElementById("offer").value = item.offer;
+}
+
+
+searchInput.addEventListener("keyup", async ()=>{
+
+    const response = await fetch("/menu");
+
+    const data = await response.json();
+
+    const filtered = data.filter(item =>
+
+        item.name.toLowerCase()
+        .includes(searchInput.value.toLowerCase())
+    );
+
+    displayMenu(filtered);
+});
+
+
+categoryFilter.addEventListener("change", async ()=>{
+
+    const response = await fetch("/menu");
+
+    const data = await response.json();
+
+    if(categoryFilter.value === "All"){
+
+        displayMenu(data);
+
+    }else{
+
+        const filtered = data.filter(item =>
+
+            item.category === categoryFilter.value
+        );
+
+        displayMenu(filtered);
+    }
+});
+
+
+loadMenu();
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>Restaurant Analytics</title>
+
+    <!-- Bootstrap -->
+
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Chart JS -->
+
+    <script
+    src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+
+            background:
+            linear-gradient(
+            135deg,
+            #0f172a,
+            #111827,
+            #1e293b
+            );
+
+            color:white;
+
+            min-height:100vh;
+
+            overflow-x:hidden;
+        }
+
+        body::before{
+
+            content:"";
+
+            position:fixed;
+
+            width:400px;
+            height:400px;
+
+            background:
+            rgba(255,140,0,0.15);
+
+            border-radius:50%;
+
+            top:-100px;
+            left:-100px;
+
+            filter:blur(100px);
+
+            z-index:-1;
+        }
+
+        body::after{
+
+            content:"";
+
+            position:fixed;
+
+            width:400px;
+            height:400px;
+
+            background:
+            rgba(0,255,170,0.12);
+
+            border-radius:50%;
+
+            bottom:-100px;
+            right:-100px;
+
+            filter:blur(100px);
+
+            z-index:-1;
+        }
+
+        .container-box{
+
+            padding:40px;
+        }
+
+        .title-box{
+
+            text-align:center;
+
+            margin-bottom:40px;
+        }
+
+        .title-box h1{
+
+            font-size:55px;
+
+            font-weight:800;
+
+            background:
+            linear-gradient(
+            to right,
+            #ffcc00,
+            #ff6b00
+            );
+            
+            background-clip:text;
+
+            -webkit-background-clip:text;
+
+            color:transparent;
+        }
+
+        .title-box p{
+
+            color:#cbd5e1;
+
+            margin-top:10px;
+
+            font-size:18px;
+        }
+
+        .analytics-card{
+
+            background:
+            rgba(255,255,255,0.08);
+
+            border:
+            1px solid rgba(255,255,255,0.1);
+
+            border-radius:25px;
+
+            padding:30px;
+
+            backdrop-filter:blur(12px);
+
+            box-shadow:
+            0 10px 40px rgba(0,0,0,0.4);
+
+            transition:0.3s;
+        }
+
+        .analytics-card:hover{
+
+            transform:translateY(-8px);
+        }
+
+        .icon-circle{
+
+            width:70px;
+            height:70px;
+
+            border-radius:50%;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            font-size:28px;
+
+            margin-bottom:20px;
+
+            color:white;
+        }
+
+        .orange{
+
+            background:
+            linear-gradient(
+            to right,
+            #ff9800,
+            #ff5722
+            );
+        }
+
+        .green{
+
+            background:
+            linear-gradient(
+            to right,
+            #00c853,
+            #00e676
+            );
+        }
+
+        .blue{
+
+            background:
+            linear-gradient(
+            to right,
+            #2196f3,
+            #00b0ff
+            );
+        }
+
+        .purple{
+
+            background:
+            linear-gradient(
+            to right,
+            #ab47bc,
+            #7e57c2
+            );
+        }
+
+        .analytics-card h3{
+
+            color:#cbd5e1;
+
+            margin-bottom:10px;
+
+            font-size:20px;
+        }
+
+        .analytics-card h1{
+
+            font-size:42px;
+
+            font-weight:800;
+        }
+
+        .growth{
+
+            color:#00ffae;
+
+            margin-top:10px;
+
+            font-weight:600;
+        }
+
+        .chart-box{
+
+            margin-top:40px;
+
+            background:
+            rgba(255,255,255,0.08);
+
+            border-radius:25px;
+
+            padding:30px;
+
+            border:
+            1px solid rgba(255,255,255,0.1);
+
+            backdrop-filter:blur(12px);
+        }
+
+        .chart-title{
+
+            margin-bottom:25px;
+
+            color:#ffcc00;
+
+            font-size:28px;
+
+            font-weight:700;
+        }
+
+        .table-box{
+
+            margin-top:40px;
+
+            background:
+            rgba(255,255,255,0.08);
+
+            border-radius:25px;
+
+            padding:30px;
+
+            border:
+            1px solid rgba(255,255,255,0.1);
+        }
+
+        table{
+
+            width:100%;
+        }
+
+        th{
+
+            color:#ffcc00;
+
+            padding:15px;
+        }
+
+        td{
+
+            padding:15px;
+
+            border-top:
+            1px solid rgba(255,255,255,0.1);
+
+            color:#ddd;
+        }
+
+        .badge-status{
+
+            padding:8px 14px;
+
+            border-radius:20px;
+
+            font-size:13px;
+
+            font-weight:bold;
+        }
+
+        .success{
+
+            background:#00c853;
+        }
+
+        .pending{
+
+            background:#ff9800;
+        }
+
+        .footer{
+
+            text-align:center;
+
+            margin-top:50px;
+
+            color:#94a3b8;
+        }
+
+        @media(max-width:768px){
+
+            .title-box h1{
+
+                font-size:38px;
+            }
+
+            .container-box{
+
+                padding:20px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container-box">
+
+    <!-- TITLE -->
+
+    <div class="title-box">
+
+        <h1>
+            📈 Restaurant Analytics
+        </h1>
+
+        <p>
+            Smart Monitoring & Business Performance
+        </p>
+
+    </div>
+
+
+    <!-- TOP CARDS -->
+
+    <div class="row g-4">
+
+        <!-- Revenue -->
+
+        <div class="col-md-3">
+
+            <div class="analytics-card">
+
+                <div class="icon-circle orange">
+
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                </div>
+
+                <h3>
+                    Total Revenue
+                </h3>
+
+                <h1>
+                    ₹1,25,000
+                </h1>
+
+                <p class="growth">
+                    +15% Growth
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Orders -->
+
+        <div class="col-md-3">
+
+            <div class="analytics-card">
+
+                <div class="icon-circle green">
+
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                </div>
+
+                <h3>
+                    Total Orders
+                </h3>
+
+                <h1>
+                    540
+                </h1>
+
+                <p class="growth">
+                    +32 New Orders
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Customers -->
+
+        <div class="col-md-3">
+
+            <div class="analytics-card">
+
+                <div class="icon-circle blue">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+                <h3>
+                    Customers
+                </h3>
+
+                <h1>
+                    890
+                </h1>
+
+                <p class="growth">
+                    Active Visitors
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Most Sold -->
+
+        <div class="col-md-3">
+
+            <div class="analytics-card">
+
+                <div class="icon-circle purple">
+
+                    <i class="fa-solid fa-pizza-slice"></i>
+
+                </div>
+
+                <h3>
+                    Most Sold Item
+                </h3>
+
+                <h1 id="mostSoldItem">
+                    Loading...
+                </h1>
+
+                <p class="growth">
+                    Bestseller Food
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SALES CHART -->
+
+    <div class="chart-box">
+
+        <h2 class="chart-title">
+
+            📊 Weekly Sales Report
+
+        </h2>
+
+        <canvas id="salesChart"></canvas>
+
+    </div>
+
+
+    <!-- ORDERS TABLE -->
+
+    <div class="table-box">
+
+        <h2 class="chart-title">
+
+            🍽 Recent Orders
+
+        </h2>
+
+        <div class="table-responsive">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Customer</th>
+
+                        <th>Food Item</th>
+
+                        <th>Amount</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td>Arun</td>
+
+                        <td>Cheese Pizza</td>
+
+                        <td>₹450</td>
+
+                        <td>
+
+                            <span class="badge-status success">
+
+                                Completed
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Rahul</td>
+
+                        <td>Burger Combo</td>
+
+                        <td>₹320</td>
+
+                        <td>
+
+                            <span class="badge-status pending">
+
+                                Pending
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Priya</td>
+
+                        <td>Fried Chicken</td>
+
+                        <td>₹550</td>
+
+                        <td>
+
+                            <span class="badge-status success">
+
+                                Completed
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>Vijay</td>
+
+                        <td>Pasta</td>
+
+                        <td>₹390</td>
+
+                        <td>
+
+                            <span class="badge-status success">
+
+                                Completed
+
+                            </span>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+
+    <a href="/dashboard">
+
+        <button style="
+
+            padding:15px 30px;
+            border:none;
+            border-radius:15px;
+            font-size:18px;
+            font-weight:bold;
+            cursor:pointer;
+
+            background:linear-gradient(
+            to right,
+            #ffcc00,
+            #ff6b00,
+            #ff3d00
+            );
+
+            color:white;
+
+            box-shadow:0 0 20px rgba(255,140,0,0.5);
+
+            transition:0.3s;
+
+        "
+
+        onmouseover="this.style.transform='scale(1.05)'"
+
+        onmouseout="this.style.transform='scale(1)'"
+
+        >
+
+            🏠 Go To Dashboard
+
+        </button>
+
+    </a>
+
+</div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        Restaurant Order Management System © 2026
+
+    </div>
+
+</div>
+
+
+<script>
+
+    async function loadMostSoldItem(){
+
+    const response =
+    await fetch("/orders");
+
+    const data =
+    await response.json();
+
+    let itemCount = {};
+
+    data.forEach(order => {
+
+        if(order.items){
+
+            const items =
+            order.items.split(",");
+
+            items.forEach(item => {
+
+                const cleanItem =
+                item.trim().split(" x")[0];
+
+                if(itemCount[cleanItem]){
+
+                    itemCount[cleanItem]++;
+
+                }else{
+
+                    itemCount[cleanItem] = 1;
+                }
+            });
+        }
+    });
+
+    let mostSold = "No Orders";
+
+    let max = 0;
+
+    for(let item in itemCount){
+
+        if(itemCount[item] > max){
+
+            max = itemCount[item];
+
+            mostSold = item;
+        }
+    }
+
+    document.getElementById(
+    "mostSoldItem"
+    ).innerText = mostSold;
+}
+
+loadMostSoldItem();
+
+const ctx =
+document.getElementById(
+"salesChart");
+
+new Chart(ctx, {
+
+    type:'bar',
+
+    data:{
+
+        labels:[
+            'Mon',
+            'Tue',
+            'Wed',
+            'Thu',
+            'Fri',
+            'Sat',
+            'Sun'
+        ],
+
+        datasets:[{
+
+            label:'Sales',
+
+            data:[
+                12,
+                19,
+                8,
+                15,
+                22,
+                30,
+                27
+            ],
+
+            backgroundColor:[
+                '#ff9800',
+                '#00c853',
+                '#2196f3',
+                '#ff5722',
+                '#ab47bc',
+                '#00b0ff',
+                '#ffcc00'
+            ],
+
+            borderRadius:10
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        plugins:{
+
+            legend:{
+
+                labels:{
+                    color:'white'
+                }
+
+            }
+
+        },
+
+        scales:{
+
+            x:{
+
+                ticks:{
+                    color:'white'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.08)'
+                }
+
+            },
+
+            y:{
+
+                ticks:{
+                    color:'white'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.08)'
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>

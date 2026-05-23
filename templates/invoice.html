@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>Smart GST Billing System</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            background:
+            linear-gradient(
+            135deg,
+            #0f172a,
+            #111827,
+            #1e293b
+            );
+
+            color:white;
+
+            padding:40px;
+
+            overflow-x:hidden;
+        }
+
+        body::before{
+
+            content:"";
+
+            position:fixed;
+
+            width:450px;
+            height:450px;
+
+            background:
+            rgba(255,140,0,0.15);
+
+            border-radius:50%;
+
+            top:-120px;
+            left:-120px;
+
+            filter:blur(100px);
+
+            z-index:-1;
+        }
+
+        body::after{
+
+            content:"";
+
+            position:fixed;
+
+            width:400px;
+            height:400px;
+
+            background:
+            rgba(0,255,200,0.15);
+
+            border-radius:50%;
+
+            bottom:-120px;
+            right:-120px;
+
+            filter:blur(100px);
+
+            z-index:-1;
+        }
+
+        .main-container{
+
+            max-width:1200px;
+
+            margin:auto;
+        }
+
+        .top-title{
+
+            text-align:center;
+
+            margin-bottom:35px;
+        }
+
+        .top-title h1{
+
+            font-size:55px;
+
+            font-weight:800;
+
+            background:
+            linear-gradient(
+            to right,
+            #ffcc00,
+            #ff6b00
+            );
+
+            background-clip:text;
+
+            -webkit-background-clip:text;
+
+            color:transparent;
+        }
+
+        .top-title p{
+
+            color:#cbd5e1;
+
+            margin-top:10px;
+
+            font-size:18px;
+        }
+
+        .billing-wrapper{
+
+            display:grid;
+
+            grid-template-columns:
+            1fr 1fr;
+
+            gap:30px;
+        }
+
+        .glass-card{
+
+            background:
+            rgba(255,255,255,0.08);
+
+            border:
+            1px solid rgba(255,255,255,0.1);
+
+            border-radius:30px;
+
+            padding:35px;
+
+            backdrop-filter:blur(15px);
+
+            box-shadow:
+            0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .glass-card h2{
+
+            margin-bottom:25px;
+
+            color:#ffcc00;
+
+            font-weight:700;
+        }
+
+        .form-control{
+
+            background:
+            rgba(0,0,0,0.4);
+
+            border:none;
+
+            color:white;
+
+            padding:15px;
+
+            border-radius:15px;
+
+            margin-bottom:18px;
+
+            font-size:16px;
+        }
+
+        .form-control:focus{
+
+            background:
+            rgba(0,0,0,0.6);
+
+            color:white;
+
+            border:2px solid orange;
+
+            box-shadow:none;
+        }
+
+        .form-control::placeholder{
+
+            color:#cbd5e1;
+        }
+
+        .btn-custom{
+
+            width:100%;
+
+            padding:15px;
+
+            border:none;
+
+            border-radius:15px;
+
+            font-size:18px;
+
+            font-weight:bold;
+
+            margin-top:10px;
+
+            transition:0.3s;
+
+            color:white;
+        }
+
+        .generate-btn{
+
+            background:
+            linear-gradient(
+            to right,
+            #ffcc00,
+            #ff6b00
+            );
+        }
+
+        .download-btn{
+
+            background:
+            linear-gradient(
+            to right,
+            #00c853,
+            #00e676
+            );
+        }
+
+        .btn-custom:hover{
+
+            transform:translateY(-3px);
+
+            box-shadow:
+            0 0 25px rgba(255,255,255,0.2);
+        }
+
+        .invoice-box{
+
+            background:
+            rgba(255,255,255,0.06);
+
+            border-radius:25px;
+
+            padding:30px;
+
+            min-height:600px;
+
+            position:relative;
+        }
+
+        .invoice-header{
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+
+            margin-bottom:30px;
+        }
+
+        .invoice-header h3{
+
+            color:#ffcc00;
+
+            font-size:32px;
+
+            font-weight:800;
+        }
+
+        .invoice-badge{
+
+            background:#00c853;
+
+            padding:10px 18px;
+
+            border-radius:30px;
+
+            font-size:14px;
+
+            font-weight:bold;
+        }
+
+        .invoice-details{
+
+            margin-top:20px;
+        }
+
+        .invoice-details p{
+
+            margin-bottom:15px;
+
+            font-size:18px;
+
+            color:#e2e8f0;
+        }
+
+        .invoice-details span{
+
+            color:#ffcc00;
+
+            font-weight:bold;
+        }
+
+        .total-box{
+
+            margin-top:30px;
+
+            background:
+            rgba(255,140,0,0.15);
+
+            padding:20px;
+
+            border-radius:20px;
+        }
+
+        .total-box h2{
+
+            margin:0;
+
+            color:#00ffae;
+
+            font-size:36px;
+        }
+
+        .invoice-footer{
+
+            margin-top:35px;
+
+            text-align:center;
+
+            color:#cbd5e1;
+
+            font-size:15px;
+        }
+
+        .icon-circle{
+
+            width:70px;
+            height:70px;
+
+            border-radius:50%;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            background:
+            linear-gradient(
+            to right,
+            #ffcc00,
+            #ff6b00
+            );
+
+            margin:auto;
+
+            margin-bottom:20px;
+
+            font-size:30px;
+        }
+
+        @media(max-width:900px){
+
+            .billing-wrapper{
+
+                grid-template-columns:1fr;
+            }
+
+            .top-title h1{
+
+                font-size:38px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <div class="top-title">
+
+        <h1>
+            💳 Smart GST Billing System
+        </h1>
+
+        <p>
+            Generate Stylish Restaurant Invoices Instantly
+        </p>
+
+    </div>
+
+    <div class="billing-wrapper">
+
+        <!-- LEFT SIDE -->
+
+        <div class="glass-card">
+
+            <div class="icon-circle">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+            </div>
+
+            <h2>
+                Create Invoice
+            </h2>
+
+            <input
+            type="text"
+            id="customer"
+            class="form-control"
+            placeholder="Customer Name">
+
+            <input
+            type="text"
+            id="item"
+            class="form-control"
+            placeholder="Food Items">
+
+            <input
+            type="number"
+            id="price"
+            class="form-control"
+            placeholder="Subtotal Price">
+
+            <input
+            type="number"
+            id="quantity"
+            class="form-control"
+            placeholder="Quantity">
+
+            <button
+            class="btn-custom generate-btn"
+            onclick="generateBill()">
+
+                <i class="fa-solid fa-bolt"></i>
+
+                Generate GST Bill
+
+            </button>
+
+            <button
+            class="btn-custom download-btn"
+            onclick="downloadPDF()">
+
+                <i class="fa-solid fa-download"></i>
+
+                Download Invoice PDF
+
+            </button>
+
+        </div>
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="invoice-box">
+
+            <div class="invoice-header">
+
+                <h3>
+                    GST Invoice
+                </h3>
+
+                <div class="invoice-badge">
+                    PAID
+                </div>
+
+            </div>
+
+            <div id="invoiceResult">
+
+                <div class="invoice-details">
+
+                    <p>
+                        Customer :
+                        <span id="customerName">
+                            ---
+                        </span>
+                    </p>
+
+                    <p>
+                        Food Items :
+                        <span id="foodItems">
+                            ---
+                        </span>
+                    </p>
+
+                    <p>
+                        Quantity :
+                        <span id="quantityText">
+                            ---
+                        </span>
+                    </p>
+
+                    <p>
+                        Subtotal :
+                        <span>
+                            ₹<span id="subtotal">0</span>
+                        </span>
+                    </p>
+
+                    <p>
+                        GST :
+                        <span>
+                            ₹<span id="gst">0</span>
+                        </span>
+                    </p>
+
+                    <div class="total-box">
+
+                        <h2>
+                            Total :
+                            ₹<span id="finalTotal">0</span>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="invoice-footer">
+
+                Thank You For Visiting Our Restaurant ❤️
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // =========================================
+    // AUTO LOAD DATA FROM orders.html
+    // =========================================
+
+    const invoiceData = JSON.parse(
+
+        localStorage.getItem("invoiceData")
+
+    );
+
+
+    if(invoiceData){
+
+        const subtotal =
+        Number(invoiceData.total_price);
+
+        const gst =
+        subtotal * 0.05;
+
+        const finalTotal =
+        subtotal + gst;
+
+
+        // AUTO FILL FORM
+
+        document.getElementById("customer").value =
+        invoiceData.customer_name;
+
+        document.getElementById("item").value =
+        invoiceData.items;
+
+        document.getElementById("price").value =
+        subtotal;
+
+        document.getElementById("quantity").value =
+        1;
+
+
+        // AUTO DISPLAY BILL
+
+        document.getElementById("customerName").innerText =
+        invoiceData.customer_name;
+
+        document.getElementById("foodItems").innerText =
+        invoiceData.items;
+
+        document.getElementById("quantityText").innerText =
+        "Multiple Items";
+
+        document.getElementById("subtotal").innerText =
+        subtotal.toFixed(2);
+
+        document.getElementById("gst").innerText =
+        gst.toFixed(2);
+
+        document.getElementById("finalTotal").innerText =
+        finalTotal.toFixed(2);
+
+    }
+
+
+
+    // =========================================
+    // GENERATE BILL
+    // =========================================
+
+    async function generateBill(){
+
+        const customer =
+        document.getElementById(
+        "customer").value;
+
+        const item =
+        document.getElementById(
+        "item").value;
+
+        const price =
+        Number(document.getElementById(
+        "price").value);
+
+        const quantity =
+        Number(document.getElementById(
+        "quantity").value);
+
+
+        if(
+
+            customer === "" ||
+
+            item === "" ||
+
+            !price ||
+
+            !quantity
+
+        ){
+
+            alert("Please Fill All Fields");
+
+            return;
+        }
+
+
+        const subtotal =
+        price;
+
+        const gst =
+        subtotal * 0.05;
+
+        const finalTotal =
+        subtotal + gst;
+
+
+        document.getElementById(
+        "customerName").innerText =
+        customer;
+
+        document.getElementById(
+        "foodItems").innerText =
+        item;
+
+        document.getElementById(
+        "quantityText").innerText =
+        quantity;
+
+        document.getElementById(
+        "subtotal").innerText =
+        subtotal.toFixed(2);
+
+        document.getElementById(
+        "gst").innerText =
+        gst.toFixed(2);
+
+        document.getElementById(
+        "finalTotal").innerText =
+        finalTotal.toFixed(2);
+
+
+        alert("GST Bill Generated Successfully");
+
+    }
+
+
+
+    // =========================================
+    // DOWNLOAD PDF
+    // =========================================
+
+    async function downloadPDF(){
+
+        const customer =
+        document.getElementById(
+        "customer").value;
+
+        const item =
+        document.getElementById(
+        "item").value;
+
+        const price =
+        document.getElementById(
+        "price").value;
+
+        const quantity =
+        document.getElementById(
+        "quantity").value;
+
+
+        if(
+
+            customer === "" ||
+
+            item === "" ||
+
+            price === "" ||
+
+            quantity === ""
+
+        ){
+
+            alert("Generate Bill First");
+
+            return;
+        }
+
+
+        const response =
+        await fetch("/download-invoice",{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                customer_name:customer,
+
+                item_name:item,
+
+                price:price,
+
+                quantity:quantity
+
+            })
+
+        });
+
+
+        const blob =
+        await response.blob();
+
+        const url =
+        window.URL.createObjectURL(blob);
+
+        const a =
+        document.createElement("a");
+
+        a.href = url;
+
+        a.download = "invoice.pdf";
+
+        a.click();
+
+    }
+
+</script>
+
+</body>
+
+</html>

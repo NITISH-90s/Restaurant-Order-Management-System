@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Restaurant Management System</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.7),
+                    rgba(0, 0, 0, 0.8)),
+                url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            padding-top: 80px;
+            text-align: center;
+        }
+
+        .main-title {
+            font-size: 70px;
+            font-weight: 700;
+            line-height: 1.2;
+            background: linear-gradient(to right, #ffcc70, #ff6b00);
+
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-size: 22px;
+            color: #d1d1d1;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+            padding: 40px 25px;
+            transition: 0.4s ease;
+            height: 100%;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(255, 102, 0, 0.3);
+            border: 1px solid rgba(255, 165, 0, 0.4);
+        }
+
+        .feature-icon {
+            font-size: 55px;
+            margin-bottom: 20px;
+            color: #ffb347;
+        }
+
+        .feature-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .feature-desc {
+            color: #d6d6d6;
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        .footer-text {
+            margin-top: 80px;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle,
+                    rgba(255, 140, 0, 0.2),
+                    transparent 70%);
+            top: -100px;
+            right: -100px;
+            z-index: -1;
+        }
+
+        @media(max-width:768px) {
+
+            .main-title {
+                font-size: 42px;
+            }
+
+            .subtitle {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="glow"></div>
+
+    <div class="container hero">
+
+        <h1 class="main-title">
+            🍽️ Restaurant <br>
+            Management System
+        </h1>
+
+        <p class="subtitle">
+            Smart Restaurant Backend & Billing Solution using Flask + SQLite
+        </p>
+
+        <div class="row g-4 justify-content-center">
+
+            <!-- Menu -->
+            <div class="col-lg-4 col-md-6">
+                <a href="/menu-page" class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+
+                    <div class="feature-title">
+                        Menu Management
+                    </div>
+
+                    <div class="feature-desc">
+                        Manage food items, categories, pricing,
+                        images, and customer ordering system.
+                    </div>
+
+                </a>
+            </div>
+
+            <!-- Billing -->
+            <div class="col-lg-4 col-md-6">
+                <a href="/orders-page" class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-receipt"></i>
+                    </div>
+
+                    <div class="feature-title">
+                        Billing System
+                    </div>
+
+                    <div class="feature-desc">
+                        Automatic invoice generation,
+                        GST calculation, and order summaries.
+                    </div>
+
+                </a>
+            </div>
+
+            <!-- Analytics -->
+            <div class="col-lg-4 col-md-6">
+                <a href="/analytics-page" class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+
+                    <div class="feature-title">
+                        Analytics Dashboard
+                    </div>
+
+                    <div class="feature-desc">
+                        Track orders, revenue, top-selling items,
+                        and restaurant performance analytics.
+                    </div>
+
+                </a>
+            </div>
+
+        </div>
+
+        <p class="footer-text">
+            Developed using Flask • SQLite • Bootstrap • HTML/CSS
+        </p>
+
+    </div>
+
+</body>
+
+</html>

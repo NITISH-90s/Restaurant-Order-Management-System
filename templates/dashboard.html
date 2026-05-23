@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+    <title>Restaurant Analytics Dashboard</title>
+
+    <!-- Bootstrap -->
+
+    <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet">
+
+    <!-- Chart JS -->
+
+    <script
+    src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
+
+    <!-- Font Awesome -->
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+
+            background:
+            linear-gradient(
+            135deg,
+            #0f172a,
+            #111827,
+            #1e293b
+            );
+
+            min-height:100vh;
+
+            color:white;
+
+            overflow-x:hidden;
+        }
+
+        body::before{
+
+            content:"";
+
+            position:fixed;
+
+            width:450px;
+            height:450px;
+
+            background:
+            rgba(255,140,0,0.15);
+
+            border-radius:50%;
+
+            top:-100px;
+            left:-100px;
+
+            filter:blur(100px);
+
+            z-index:-1;
+        }
+
+        body::after{
+
+            content:"";
+
+            position:fixed;
+
+            width:450px;
+            height:450px;
+
+            background:
+            rgba(0,255,180,0.12);
+
+            border-radius:50%;
+
+            bottom:-100px;
+            right:-100px;
+
+            filter:blur(100px);
+
+            z-index:-1;
+        }
+
+        .dashboard-container{
+
+            padding:40px;
+        }
+
+        .dashboard-title{
+
+            text-align:center;
+
+            margin-bottom:40px;
+        }
+
+        .dashboard-title h1{
+
+            font-size:55px;
+
+            font-weight:800;
+
+            background:
+            linear-gradient(
+            to right,
+            #ffcc00,
+            #ff6b00
+            );
+            
+            background-clip:text;
+
+            -webkit-background-clip:text;
+
+            color:transparent;
+        }
+
+        .dashboard-title p{
+
+            color:#cbd5e1;
+
+            margin-top:10px;
+
+            font-size:18px;
+        }
+
+        .glass-card{
+
+            background:
+            rgba(255,255,255,0.08);
+
+            border:
+            1px solid rgba(255,255,255,0.1);
+
+            border-radius:25px;
+
+            padding:30px;
+
+            backdrop-filter:blur(15px);
+
+            box-shadow:
+            0 10px 40px rgba(0,0,0,0.4);
+
+            transition:0.3s;
+        }
+
+        .glass-card:hover{
+
+            transform:translateY(-6px);
+        }
+
+        .icon-box{
+
+            width:70px;
+            height:70px;
+
+            border-radius:50%;
+
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            margin-bottom:20px;
+
+            font-size:28px;
+
+            color:white;
+        }
+
+        .revenue-icon{
+
+            background:
+            linear-gradient(
+            to right,
+            #ff9800,
+            #ff5722
+            );
+        }
+
+        .orders-icon{
+
+            background:
+            linear-gradient(
+            to right,
+            #00c853,
+            #00e676
+            );
+        }
+
+        .food-icon{
+
+            background:
+            linear-gradient(
+            to right,
+            #00b0ff,
+            #2979ff
+            );
+        }
+
+        .customers-icon{
+
+            background:
+            linear-gradient(
+            to right,
+            #ab47bc,
+            #7e57c2
+            );
+        }
+
+        .glass-card h3{
+
+            font-size:20px;
+
+            color:#cbd5e1;
+
+            margin-bottom:10px;
+        }
+
+        .glass-card h1{
+
+            font-size:42px;
+
+            font-weight:800;
+        }
+
+        .growth{
+
+            margin-top:10px;
+
+            color:#00ff9d;
+
+            font-weight:600;
+        }
+
+        .chart-box{
+
+            margin-top:40px;
+
+            background:
+            rgba(255,255,255,0.08);
+
+            border:
+            1px solid rgba(255,255,255,0.1);
+
+            border-radius:25px;
+
+            padding:30px;
+
+            backdrop-filter:blur(15px);
+
+            box-shadow:
+            0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .chart-title{
+
+            margin-bottom:25px;
+
+            font-size:28px;
+
+            font-weight:700;
+
+            color:#ffcc00;
+        }
+
+        .activity-box{
+
+            margin-top:40px;
+
+            background:
+            rgba(255,255,255,0.08);
+
+            border-radius:25px;
+
+            padding:30px;
+
+            border:
+            1px solid rgba(255,255,255,0.1);
+        }
+
+        .activity-box h2{
+
+            color:#ffcc00;
+
+            margin-bottom:20px;
+        }
+
+        .activity-item{
+
+            background:
+            rgba(255,255,255,0.06);
+
+            padding:15px 20px;
+
+            border-radius:15px;
+
+            margin-bottom:15px;
+
+            display:flex;
+
+            justify-content:space-between;
+
+            align-items:center;
+        }
+
+        .badge-status{
+
+            background:#00c853;
+
+            padding:8px 15px;
+
+            border-radius:20px;
+
+            font-size:13px;
+
+            font-weight:bold;
+        }
+
+        .footer-text{
+
+            text-align:center;
+
+            margin-top:50px;
+
+            color:#94a3b8;
+        }
+
+        @media(max-width:768px){
+
+            .dashboard-title h1{
+
+                font-size:38px;
+            }
+
+            .dashboard-container{
+
+                padding:20px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- TITLE -->
+
+    <div class="dashboard-title">
+
+        <h1>
+            📊 Restaurant Analytics Dashboard
+        </h1>
+
+        <p>
+            Smart Business Insights & Revenue Monitoring
+        </p>
+
+    </div>
+
+
+    <!-- CARDS -->
+
+    <div class="row g-4">
+
+        <!-- REVENUE -->
+
+        <div class="col-md-3">
+
+            <div class="glass-card">
+
+                <div class="icon-box revenue-icon">
+
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+
+                </div>
+
+                <h3>
+                    Total Revenue
+                </h3>
+
+                <h1>
+                    ₹50,000
+                </h1>
+
+                <p class="growth">
+                    +18% This Week
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ORDERS -->
+
+        <div class="col-md-3">
+
+            <div class="glass-card">
+
+                <div class="icon-box orders-icon">
+
+                    <i class="fa-solid fa-bowl-food"></i>
+
+                </div>
+
+                <h3>
+                    Total Orders
+                </h3>
+
+                <h1>
+                    120
+                </h1>
+
+                <p class="growth">
+                    +12 New Orders
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- MOST SOLD -->
+
+        <div class="col-md-3">
+
+            <div class="glass-card">
+
+                <div class="icon-box food-icon">
+
+                    <i class="fa-solid fa-pizza-slice"></i>
+
+                </div>
+
+                <h3>
+                    Most Sold
+                </h3>
+
+                <h1>
+                    Pizza
+                </h1>
+
+                <p class="growth">
+                    Bestseller Item
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CUSTOMERS -->
+
+        <div class="col-md-3">
+
+            <div class="glass-card">
+
+                <div class="icon-box customers-icon">
+
+                    <i class="fa-solid fa-users"></i>
+
+                </div>
+
+                <h3>
+                    Customers
+                </h3>
+
+                <h1>
+                    430
+                </h1>
+
+                <p class="growth">
+                    Active Visitors
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CHART -->
+
+    <div class="chart-box">
+
+        <h2 class="chart-title">
+            📈 Weekly Sales Analytics
+        </h2>
+
+        <canvas id="salesChart"></canvas>
+
+    </div>
+
+
+    <!-- RECENT ACTIVITY -->
+
+    <div class="activity-box">
+
+        <h2>
+            🔥 Recent Restaurant Activity
+        </h2>
+
+        <div class="activity-item">
+
+            <div>
+
+                🍕 Pizza Order Completed
+
+            </div>
+
+            <div class="badge-status">
+
+                SUCCESS
+
+            </div>
+
+        </div>
+
+
+        <div class="activity-item">
+
+            <div>
+
+                🧾 Invoice Generated For Customer
+
+            </div>
+
+            <div class="badge-status">
+
+                DONE
+
+            </div>
+
+        </div>
+
+
+        <div class="activity-item">
+
+            <div>
+
+                🍔 Burger Added To Menu
+
+            </div>
+
+            <div class="badge-status">
+
+                UPDATED
+
+            </div>
+
+        </div>
+
+
+        <div class="activity-item">
+
+            <div>
+
+                💳 Payment Successfully Received
+
+            </div>
+
+            <div class="badge-status">
+
+                PAID
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer-text">
+
+        Restaurant Order Management System © 2026
+
+    </div>
+
+</div>
+
+
+<script>
+
+const ctx =
+document.getElementById(
+"salesChart");
+
+new Chart(ctx, {
+
+    type:'line',
+
+    data:{
+
+        labels:[
+            'Mon',
+            'Tue',
+            'Wed',
+            'Thu',
+            'Fri',
+            'Sat',
+            'Sun'
+        ],
+
+        datasets:[{
+
+            label:'Sales',
+
+            data:[
+                12,
+                19,
+                8,
+                15,
+                22,
+                30,
+                27
+            ],
+
+            borderColor:'#ffcc00',
+
+            backgroundColor:
+            'rgba(255,204,0,0.2)',
+
+            borderWidth:4,
+
+            tension:0.4,
+
+            fill:true,
+
+            pointBackgroundColor:'#ffffff',
+
+            pointRadius:5
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        plugins:{
+
+            legend:{
+
+                labels:{
+                    color:'white'
+                }
+
+            }
+
+        },
+
+        scales:{
+
+            x:{
+
+                ticks:{
+                    color:'white'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.08)'
+                }
+
+            },
+
+            y:{
+
+                ticks:{
+                    color:'white'
+                },
+
+                grid:{
+                    color:'rgba(255,255,255,0.08)'
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+</body>
+
+</html>

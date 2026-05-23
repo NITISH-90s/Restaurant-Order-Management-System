@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Restaurant Orders</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Segoe UI',sans-serif;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            background:
+            linear-gradient(
+            135deg,
+            #0f172a,
+            #111827,
+            #1e293b
+            );
+
+            color:white;
+
+            overflow-x:hidden;
+        }
+
+        body::before{
+
+            content:"";
+
+            position:fixed;
+
+            width:500px;
+            height:500px;
+
+            background:rgba(255,140,0,0.15);
+
+            border-radius:50%;
+
+            top:-200px;
+            right:-150px;
+
+            filter:blur(100px);
+
+            z-index:-1;
+        }
+
+        body::after{
+
+            content:"";
+
+            position:fixed;
+
+            width:450px;
+            height:450px;
+
+            background:rgba(0,255,200,0.12);
+
+            border-radius:50%;
+
+            bottom:-200px;
+            left:-150px;
+
+            filter:blur(100px);
+
+            z-index:-1;
+        }
+
+        .main-container{
+
+            max-width:1400px;
+
+            margin:auto;
+
+            padding:50px 30px;
+        }
+
+        .title{
+
+            text-align:center;
+
+            font-size:65px;
+
+            font-weight:800;
+
+            margin-bottom:15px;
+
+            background:linear-gradient(
+            to right,
+            #ffcc00,
+            #ff6b00,
+            #ff3d00
+            );
+
+            background-clip:text;
+
+            -webkit-background-clip:text;
+
+            color:transparent;
+        }
+
+        .subtitle{
+
+            text-align:center;
+
+            color:#cbd5e1;
+
+            font-size:20px;
+
+            margin-bottom:60px;
+        }
+
+        .glass-box{
+
+            background:rgba(255,255,255,0.08);
+
+            border:1px solid rgba(255,255,255,0.1);
+
+            backdrop-filter:blur(18px);
+
+            border-radius:30px;
+
+            padding:35px;
+
+            box-shadow:0 10px 40px rgba(0,0,0,0.4);
+
+            margin-bottom:40px;
+        }
+
+        .glass-box h2{
+
+            margin-bottom:25px;
+
+            font-size:32px;
+
+            font-weight:700;
+
+            color:#ffcc00;
+        }
+
+        .form-control{
+
+            background:rgba(0,0,0,0.45);
+
+            border:none;
+
+            color:white;
+
+            border-radius:16px;
+
+            padding:16px;
+
+            margin-bottom:18px;
+
+            font-size:17px;
+        }
+
+        .form-control:focus{
+
+            background:rgba(0,0,0,0.6);
+
+            color:white;
+
+            border:2px solid orange;
+
+            box-shadow:none;
+        }
+
+        .form-control::placeholder{
+
+            color:#cbd5e1;
+        }
+
+        .order-btn{
+
+            width:100%;
+
+            padding:16px;
+
+            border:none;
+
+            border-radius:18px;
+
+            font-size:20px;
+
+            font-weight:bold;
+
+            background:linear-gradient(
+            to right,
+            #ffcc00,
+            #ff6b00
+            );
+
+            color:white;
+
+            transition:0.3s;
+        }
+
+        .order-btn:hover{
+
+            transform:translateY(-3px);
+
+            box-shadow:0 0 25px orange;
+        }
+
+        .stats-grid{
+
+            display:grid;
+
+            grid-template-columns:
+            repeat(auto-fit,minmax(250px,1fr));
+
+            gap:25px;
+
+            margin-bottom:50px;
+        }
+
+        .stat-card{
+
+            background:rgba(255,255,255,0.07);
+
+            border-radius:25px;
+
+            padding:30px;
+
+            text-align:center;
+
+            backdrop-filter:blur(10px);
+
+            transition:0.3s;
+        }
+
+        .stat-card:hover{
+
+            transform:translateY(-10px);
+
+            box-shadow:0 0 25px rgba(255,140,0,0.5);
+        }
+
+        .stat-card i{
+
+            font-size:45px;
+
+            margin-bottom:18px;
+
+            color:#ffcc00;
+        }
+
+        .stat-card h3{
+
+            font-size:38px;
+
+            margin-bottom:10px;
+        }
+
+        .stat-card p{
+
+            color:#d1d5db;
+
+            font-size:18px;
+        }
+
+        .orders-grid{
+
+            display:grid;
+
+            grid-template-columns:
+            repeat(auto-fit,minmax(320px,1fr));
+
+            gap:25px;
+        }
+
+        .order-card{
+
+            background:rgba(255,255,255,0.08);
+
+            border-radius:25px;
+
+            padding:25px;
+
+            backdrop-filter:blur(10px);
+
+            transition:0.3s;
+
+            position:relative;
+
+            overflow:hidden;
+        }
+
+        .order-card:hover{
+
+            transform:translateY(-8px);
+
+            box-shadow:0 0 25px rgba(255,140,0,0.5);
+        }
+
+        .order-badge{
+
+            position:absolute;
+
+            top:18px;
+            right:18px;
+
+            background:#00ffae;
+
+            color:black;
+
+            padding:8px 14px;
+
+            border-radius:30px;
+
+            font-size:13px;
+
+            font-weight:bold;
+        }
+
+        .order-card h3{
+
+            font-size:28px;
+
+            margin-bottom:18px;
+
+            color:#ffcc00;
+        }
+
+        .order-card p{
+
+            margin-bottom:10px;
+
+            color:#e2e8f0;
+
+            font-size:17px;
+        }
+
+        .price{
+
+            font-size:26px;
+
+            font-weight:bold;
+
+            color:#00ffae;
+
+            margin-top:12px;
+        }
+
+        .delete-btn{
+
+            width:100%;
+
+            margin-top:20px;
+
+            padding:14px;
+
+            border:none;
+
+            border-radius:14px;
+
+            background:#ff003c;
+
+            color:white;
+
+            font-weight:bold;
+
+            transition:0.3s;
+        }
+
+        .delete-btn:hover{
+
+            background:#ff1744;
+
+            transform:scale(1.02);
+        }
+
+        .empty{
+
+            text-align:center;
+
+            font-size:24px;
+
+            color:#cbd5e1;
+
+            margin-top:30px;
+        }
+
+        @media(max-width:768px){
+
+            .title{
+                font-size:42px;
+            }
+
+            .subtitle{
+                font-size:16px;
+            }
+
+            .main-container{
+                padding:25px;
+            }
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="main-container">
+
+    <h1 class="title">
+        🛒 Restaurant Order System
+    </h1>
+
+    <p class="subtitle">
+        Smart Dynamic Order Management Dashboard
+    </p>
+
+
+    <!-- STATS -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <i class="fa-solid fa-cart-shopping"></i>
+
+            <h3 id="totalOrders">0</h3>
+
+            <p>Total Orders</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <i class="fa-solid fa-money-bill-wave"></i>
+
+            <h3 id="totalRevenue">₹0</h3>
+
+            <p>Total Revenue</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <i class="fa-solid fa-users"></i>
+
+            <h3 id="totalCustomers">0</h3>
+
+            <p>Customers</p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ORDER FORM -->
+
+    <div class="glass-box">
+
+        <h2>
+            ✨ Create New Order
+        </h2>
+
+        <form id="orderForm">
+
+            <input
+            type="text"
+            id="customer_name"
+            class="form-control"
+            placeholder="Customer Name"
+            required>
+
+            <input
+            type="text"
+            id="item_name"
+            class="form-control"
+            placeholder="Food Item"
+            required>
+
+            <input
+            type="number"
+            id="quantity"
+            class="form-control"
+            placeholder="Quantity"
+            required>
+
+            <input
+            type="number"
+            id="total_price"
+            class="form-control"
+            placeholder="Total Price"
+            required>
+
+            <div
+          id="cartBox"
+          style="
+          margin-top:30px;
+          padding:20px;
+          background:rgba(255,255,255,0.05);
+          border-radius:20px;
+          ">
+
+    <button
+    type="button"
+    id="addCartBtn"
+    class="order-btn">
+
+        🛒 Add To Cart
+
+    </button>
+
+    <h3
+    style="
+    margin-top:20px;
+    color:#ffcc00;
+    ">
+
+        🛍️ Cart Items
+
+    </h3>
+
+    <div id="cartItems">
+
+        <p>No Items Added</p>
+
+    </div>
+
+    <h2
+    style="
+    margin-top:20px;
+    color:#00ffae;
+    ">
+
+        Total:
+        ₹<span id="cartTotal">0</span>
+
+    </h2>
+
+    <button
+    id="finalOrderBtn"
+    class="order-btn"
+    style="margin-top:20px;">
+
+        ✅ Place Final Order
+
+    </button>
+
+</div>
+
+        </form>
+
+    </div>
+
+
+    <!-- ORDERS -->
+
+    <div class="glass-box">
+
+        <h2>
+            📦 Live Orders
+        </h2>
+
+        <div class="orders-grid" id="ordersContainer">
+
+        </div>
+
+    </div>
+
+</div>
+
+ 
+<script>
+
+  let cart = [];
+
+const addCartBtn =
+document.getElementById("addCartBtn");
+
+const form = document.getElementById("orderForm");
+
+const ordersContainer =
+document.getElementById("ordersContainer");
+
+const totalOrders =
+document.getElementById("totalOrders");
+
+const totalRevenue =
+document.getElementById("totalRevenue");
+
+const totalCustomers =
+document.getElementById("totalCustomers");
+
+
+
+async function loadOrders(){
+
+    const response =
+    await fetch("/orders");
+
+    const data =
+    await response.json();
+
+    displayOrders(data);
+}
+
+function displayOrders(data){
+
+    ordersContainer.innerHTML = "";
+
+    totalOrders.innerText = data.length;
+
+    totalCustomers.innerText = data.length;
+
+    let revenue = 0;
+
+    if(data.length === 0){
+
+        ordersContainer.innerHTML = `
+
+        <div class="empty">
+
+            No Orders Created Yet 🍽️
+
+        </div>
+
+        `;
+
+        return;
+    }
+
+    data.forEach(order => {
+
+        revenue += Number(order.total_price);
+
+        ordersContainer.innerHTML += `
+
+        <div class="order-card">
+
+            <span class="order-badge">
+
+                ACTIVE
+
+            </span>
+
+            <h3>
+
+                👤 ${order.customer_name}
+
+            </h3>
+
+            <p>
+
+                🍔 Items:
+                ${order.items}
+
+            </p>
+
+            <div class="price">
+
+                ₹${order.total_price}
+
+            </div>
+
+            <button
+            class="delete-btn"
+            onclick="deleteOrder(${order.id})">
+
+                Delete Order
+
+            </button>
+
+        </div>
+
+        `;
+    });
+
+    totalRevenue.innerText = `₹${revenue}`;
+}
+
+addCartBtn.addEventListener("click", () => {
+
+    const itemName =
+    document.getElementById("item_name").value;
+
+    const quantity =
+    document.getElementById("quantity").value;
+
+    const total =
+    document.getElementById("total_price").value;
+
+    if(!itemName || !quantity || !total){
+
+        alert("Fill all fields");
+        return;
+
+    }
+
+    cart.push({
+
+        name: itemName,
+        quantity: quantity,
+        price: total
+
+    });
+
+    displayCart();
+    alert("Item Added To Cart");
+
+});
+
+function displayCart(){
+
+    const cartItems =
+    document.getElementById("cartItems");
+
+    const cartTotal =
+    document.getElementById("cartTotal");
+
+    cartItems.innerHTML = "";
+
+    let total = 0;
+
+    cart.forEach((item,index)=>{
+
+        total += Number(item.price);
+
+        cartItems.innerHTML += `
+
+        <div
+        style="
+        margin-top:10px;
+        padding:10px;
+        background:rgba(255,255,255,0.05);
+        border-radius:10px;
+        ">
+
+            <h4>
+
+                ${item.name}
+
+            </h4>
+
+            <p>
+
+                Quantity:
+                ${item.quantity}
+
+            </p>
+
+            <p>
+
+                Price:
+                ₹${item.price}
+
+            </p>
+
+        </div>
+
+        `;
+    });
+
+    cartTotal.innerText = total;
+}
+
+document
+.getElementById("finalOrderBtn")
+.addEventListener("click", async()=>{
+
+    const customerName =
+    document.getElementById("customer_name").value;
+
+    const total =
+    document.getElementById("cartTotal").innerText;
+
+    const items =
+    cart.map(item =>
+
+        `${item.name} x${item.quantity}`
+
+    ).join(", ");
+
+    const response = await fetch("/orders",{
+
+        method:"POST",
+
+        headers:{
+            "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+            customer_name: customerName,
+
+            items: items,
+
+            total_price: total
+
+        })
+    });
+
+    const data = await response.json();
+
+   localStorage.setItem(
+
+    "invoiceData",
+
+    JSON.stringify({
+
+        customer_name: customerName,
+
+        items: items,
+
+        total_price: total
+
+    })
+
+);
+
+window.location.href = "/billing-page";
+});
+
+async function deleteOrder(id){
+
+    await fetch(`/orders/${id}`,{
+
+        method:"DELETE"
+
+    });
+
+    loadOrders();
+}
+
+
+
+loadOrders();
+
+</script>
+
+</body>
+</html>
